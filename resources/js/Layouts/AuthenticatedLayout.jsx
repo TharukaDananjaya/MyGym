@@ -52,6 +52,26 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </NavLink>
                                     </>
                                 )}
+                                {can.bookClass && (
+                                    <>
+                                        <NavLink
+                                            href={route("booking.create")}
+                                            active={route().current(
+                                                "booking.create"
+                                            )}
+                                        >
+                                            Book a Class
+                                        </NavLink>
+                                        <NavLink
+                                            href={route("booking.index")}
+                                            active={route().current(
+                                                "booking.index"
+                                            )}
+                                        >
+                                            Upcomming Classes
+                                        </NavLink>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -167,6 +187,22 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <ResponsiveNavLink
                                     href={route("schedule.index")}
                                     active={route().current("schedule.index")}
+                                >
+                                    Upcomming Classes
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+                        {can.bookClass && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route("booking.create")}
+                                    active={route().current("booking.create")}
+                                >
+                                    Book a Class
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route("booking.index")}
+                                    active={route().current("booking.index")}
                                 >
                                     Upcomming Classes
                                 </ResponsiveNavLink>

@@ -85,7 +85,10 @@ class ScheduledClassController extends Controller
      */
     public function destroy(Request $request, ScheduledClass $schedule)
     {
-        if($request->user()->id !== $schedule->instructor_id){
+        // if($request->user()->id !== $schedule->instructor_id){
+        //     abort(403, 'Unauthorized action.');
+        // }
+        if($request->user()->cannot('delete', $schedule)) {
             abort(403, 'Unauthorized action.');
         }
         $schedule->delete();

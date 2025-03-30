@@ -14,7 +14,7 @@ class ScheduledClassController extends Controller
      */
     public function index(Request $request) {
         $scheduledClasses = $request->user()->scheduledClasses()
-        ->where('date_time', '>', now())
+        ->upcomming()
         ->with('classType')
         ->oldest('date_time')
         ->get();

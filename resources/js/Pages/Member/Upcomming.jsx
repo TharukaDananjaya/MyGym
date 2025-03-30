@@ -1,41 +1,38 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router } from "@inertiajs/react";
 
-export default function Upcoming({ scheduledClasses }) {
-    const onCancel = (classItem) =>{
-        confirm(
-            "Are you sure you want to cancel this class?"
-        ) && router.delete(route('schedule.destroy', classItem))
-    }
+export default function Upcomming({ bookings }) {
+    const onCancel = (scheduleClassId) => {
+        confirm("Are you sure you want to cancel this class?") &&
+            router.delete(
+                route("booking.destroy", scheduleClassId )
+            );
+    };
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Upcoming Classes
+                    Upcomming Classes
                 </h2>
             }
         >
-            <Head title="Upcoming Classes" />
+            <Head title="Upcomming Classes" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-10 text-gray-900 max-w-2xl divide-y">
-                            {scheduledClasses.length > 0 ? (
-                                scheduledClasses.map((classItem) => (
+                            {bookings.length > 0 ? (
+                                bookings.map((classItem) => (
                                     <div key={classItem.id} className="py-6">
                                         <div className="flex gap-6 justify-between">
                                             <div>
                                                 <p className="text-2xl font-bold text-purple-700">
                                                     {classItem.class_type.name}
                                                 </p>
-                                                <span className="text-slate-600 text-sm">
-                                                    {
-                                                        classItem.class_type
-                                                            .minuts
-                                                    }{" "}
-                                                    minutes
-                                                </span>
+                                                <p className="text-sm">
+                                                    {classItem.instructor.name}
+                                                </p>
                                             </div>
                                             <div className="text-right flex-shrink-0">
                                                 <p className="text-lg font-bold">
@@ -57,7 +54,12 @@ export default function Upcoming({ scheduledClasses }) {
                                             </div>
                                         </div>
                                         <div className="mt-1 text-right">
-                                            <button className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition" onClick={()=> onCancel(classItem)}>
+                                            <button
+                                                className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                                onClick={() =>
+                                                    onCancel(classItem.id)
+                                                }
+                                            >
                                                 Cancel
                                             </button>
                                         </div>
@@ -65,12 +67,14 @@ export default function Upcoming({ scheduledClasses }) {
                                 ))
                             ) : (
                                 <div>
-                                    <p>You don't have any upcoming classes</p>
+                                    <p>
+                                        No classes are booked.
+                                    </p>
                                     <a
                                         className="inline-block mt-6 underline text-sm text-blue-600 hover:text-blue-800"
-                                        href="/schedule/create"
+                                        href="/member/book"
                                     >
-                                        Schedule now
+                                        Book now
                                     </a>
                                 </div>
                             )}

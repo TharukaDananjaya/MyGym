@@ -1,21 +1,22 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router } from "@inertiajs/react";
 
-export default function Upcoming({ scheduledClasses }) {
-    const onCancel = (classItem) =>{
-        confirm(
-            "Are you sure you want to cancel this class?"
-        ) && router.delete(route('schedule.destroy', classItem))
-    }
+export default function Book({ scheduledClasses }) {
+    const onBook = (scheduledClassId) => {
+        confirm("Are you sure you want to book this class?") &&
+            router.post(route("booking.store"), {
+                scheduled_class_id: scheduledClassId,
+            });
+    };
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Upcoming Classes
+                    Book Classes
                 </h2>
             }
         >
-            <Head title="Upcoming Classes" />
+            <Head title="Book Classes" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -28,6 +29,15 @@ export default function Upcoming({ scheduledClasses }) {
                                             <div>
                                                 <p className="text-2xl font-bold text-purple-700">
                                                     {classItem.class_type.name}
+                                                </p>
+                                                <p className="text-sm">
+                                                    {classItem.instructor.name}
+                                                </p>
+                                                <p className="mt-2 text-sm">
+                                                    {
+                                                        classItem.class_type
+                                                            .description
+                                                    }
                                                 </p>
                                                 <span className="text-slate-600 text-sm">
                                                     {
@@ -57,15 +67,23 @@ export default function Upcoming({ scheduledClasses }) {
                                             </div>
                                         </div>
                                         <div className="mt-1 text-right">
-                                            <button className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition" onClick={()=> onCancel(classItem)}>
-                                                Cancel
+                                            <button
+                                                className="px-3 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                                                onClick={() =>
+                                                    onBook(classItem.id)
+                                                }
+                                            >
+                                                Book
                                             </button>
                                         </div>
                                     </div>
                                 ))
                             ) : (
                                 <div>
-                                    <p>You don't have any upcoming classes</p>
+                                    <p>
+                                        No classes are scheduled. Check back
+                                        later
+                                    </p>
                                     <a
                                         className="inline-block mt-6 underline text-sm text-blue-600 hover:text-blue-800"
                                         href="/schedule/create"

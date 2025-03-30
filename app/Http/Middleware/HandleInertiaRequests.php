@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'can' => [
                     'scheduleClass' => Gate::allows('schedule-class'),
+                    'bookClass' => Gate::allows('book-class'),
                 ]
             ],
             'flash' => [

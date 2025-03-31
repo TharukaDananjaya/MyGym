@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ClassCanceled;
 use App\Models\ClassType;
 use App\Models\ScheduledClass;
 use Illuminate\Http\Request;
@@ -12,12 +13,13 @@ class ScheduledClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $scheduledClasses = $request->user()->scheduledClasses()
-        ->upcomming()
-        ->with('classType')
-        ->oldest('date_time')
-        ->get();
+            ->upcomming()
+            ->with('classType')
+            ->oldest('date_time')
+            ->get();
         return Inertia::render('Instructor/Upcomming', [
             'scheduledClasses' => $scheduledClasses
         ]);
@@ -88,10 +90,13 @@ class ScheduledClassController extends Controller
         // if($request->user()->id !== $schedule->instructor_id){
         //     abort(403, 'Unauthorized action.');
         // }
-        if($request->user()->cannot('delete', $schedule)) {
+        if ($request->user()->cannot('delete', $schedule)) {
             abort(403, 'Unauthorized action.');
         }
+        ClassCanceled::dispatch($schedule);
+        $schedule->members()->detach();
         $schedule->delete();
+
 
         return redirect()->back()->with('success', 'Class canceled successfully');
     }

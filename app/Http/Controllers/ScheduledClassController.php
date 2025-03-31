@@ -55,7 +55,7 @@ class ScheduledClassController extends Controller
 
         ScheduledClass::create($validated);
 
-        return redirect()->back()->with('success', 'Class scheduled successfully');
+        return redirect()->route('schedule.index')->with('success', 'Class scheduled successfully');
     }
 
     /**
